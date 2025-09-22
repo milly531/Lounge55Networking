@@ -25,32 +25,25 @@ namespace MyProject
   }
 }
 ```
-to actually make this map the endpoints, you do
+To map endpoints, you first create a new instance of
+`NetworkManager` by doing
 ```
-NetworkManager.MapEndpoints(typeof(ApiController).Assembly);
+NetworkManager Api = new NetworkManager();
 ```
-Then to start the listening you do
+then you can do
 ```
-using System;
-using System.Threading.Tasks;
-using Lounge55Networking.Server;
-
-namespace MyProject
-{
-    internal class Program
-    {
-        static async Task Main(string[] args)
-        {
-            NetworkManager.MapEndpoints(typeof(ApiController).Assembly);
-            await NetworkManager.StartListenAsync(new string[] { "http://localhost:5000/" });
-            Console.ReadKey();
-        }
-    }
-}
+Api.MapEndpoints(typeof(ApiController).Assembly);
 ```
-Then to stop you do
+Then to start listening,
+you call `StartListenAsync` in
+your NetworkManager instance.
+E.g
 ```
-NetworkManager.StopListen():
+await Api.StartListenAsync(new string[] { "http://localhost:5000" });
+```
+And to stop listening you can do
+```
+Api.StopListen();
 ```
 # This is still a WIP
 So let me know about any issues in the library
