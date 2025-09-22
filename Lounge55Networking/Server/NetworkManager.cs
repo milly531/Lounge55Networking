@@ -62,12 +62,11 @@ namespace Lounge55Networking.Server
             }
         }
 
-        private static Stream InputStream;
         public static bool IsListening { get; private set; } = false;
         private static HttpListener listener = new HttpListener();
         static readonly List<Core.MethodBase> ValidEndpoints = new List<Core.MethodBase>();
 
-        public static async Task StartListenAsync(string[] ListenerPrefixes)
+        public async Task StartListenAsync(string[] ListenerPrefixes)
         {
             try
             {
@@ -192,7 +191,7 @@ namespace Lounge55Networking.Server
             }
         }
 
-        public static void StopListen()
+        public void StopListen()
         {
             if (listener.IsListening)
             {
@@ -205,7 +204,7 @@ namespace Lounge55Networking.Server
             }
         }
 
-        public static void MapEndpoints(Assembly assembly)
+        public void MapEndpoints(Assembly assembly)
         {
             var controllers = assembly.GetTypes()
                 .Where(t => t.IsSubclassOf(typeof(ApiControllerBase)) && !t.IsAbstract);
