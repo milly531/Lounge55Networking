@@ -1,4 +1,4 @@
-﻿using Lounge55Networking.Core;
+using Lounge55Networking.Core;
 using Lounge55Networking.Logging;
 using System;
 using System.Collections.Generic;
@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 
 namespace Lounge55Networking.Server
 {
-
     public interface IActionResult // still WIP
     {
         Task ExecuteResultAsync(HttpListenerContext context);
@@ -21,55 +20,55 @@ namespace Lounge55Networking.Server
     {
         public HttpListenerContext Context;
 
+        private byte[] _cachedBody;
+
         public string GetPostString()
         {
-            var bodyObj = ReadPostBodyForLogging();
-            if (bodyObj is string str) return str;
-            return null;
+            if (_cachedBody == null) ReadAndCacheBody();
+            return Context.Request.ContentEncoding.GetString(_cachedBody);
         }
 
         public byte[] GetPostBytes()
         {
-            var bodyObj = ReadPostBodyForLogging();
-            if (bodyObj is byte[] bytes) return bytes;
-            return null;
+            if (_cachedBody == null) ReadAndCacheBody();
+            return _cachedBody;
         }
 
         public HttpListenerContext HttpContext() => Context;
 
-        private object ReadPostBodyForLogging()
+        private void ReadAndCacheBody()
         {
-            if (Context == null) return null;
+            if (Context == null) return;
 
             using (var memory = new MemoryStream())
             {
                 Context.Request.InputStream.CopyTo(memory);
-                byte[] bodyBytes = memory.ToArray();
+                _cachedBody = memory.ToArray();
+            }
 
-                string contentType = Context.Request.ContentType?.ToLowerInvariant() ?? "";
+            string contentType = Context.Request.ContentType?.ToLowerInvariant() ?? "";
 
-                if (contentType.Contains("application/json") ||
-                    contentType.Contains("text/") ||
-                    contentType.Contains("application/x-www-form-urlencoded") ||
-                    contentType.Contains("xml"))
-                {
-                    string bodyText = Context.Request.ContentEncoding.GetString(bodyBytes);
-                    Logger.LogInfo($"API Post Body: {bodyText}");
-                    return bodyText;
-                }
-                else
-                {
-                    Logger.LogInfo("API Post Body Cannot Be Displayed.");
-                    return bodyBytes;
-                }
+            if (contentType.Contains("application/json") ||
+                contentType.Contains("text/") ||
+                contentType.Contains("application/x-www-form-urlencoded") ||
+                contentType.Contains("xml"))
+            {
+                string bodyText = Context.Request.ContentEncoding.GetString(_cachedBody);
+                Logger.LogInfo($"API Post Body: {bodyText}");
+            }
+            else
+            {
+                Logger.LogInfo("API Post Body Cannot Be Displayed.");
             }
         }
 
+        private static Stream InputStream;
         public static bool IsListening { get; private set; } = false;
+        private static HttpListener listener = new HttpListener();
         static readonly List<Core.MethodBase> ValidEndpoints = new List<Core.MethodBase>();
+
         public static async Task StartListenAsync(string[] ListenerPrefixes)
         {
-            HttpListener listener = new HttpListener();
             try
             {
                 foreach (string prefix in ListenerPrefixes)
@@ -117,6 +116,7 @@ namespace Lounge55Networking.Server
             string url = context.Request.Url.AbsolutePath;
             bool endpointFound = false;
             Logger.LogInfo("Client Requested: " + context.Request.RawUrl);
+
             foreach (var endpoint in ValidEndpoints)
             {
                 if (endpoint.Route == url)
@@ -192,6 +192,19 @@ namespace Lounge55Networking.Server
             }
         }
 
+        public static void StopListen()
+        {
+            if (listener.IsListening)
+            {
+                Logger.LogInfo("Stopped Listening.");
+                listener.Stop();
+            }
+            else
+            {
+                Logger.LogWarning("Listener Is Not Listening!");
+            }
+        }
+
         public static void MapEndpoints(Assembly assembly)
         {
             var controllers = assembly.GetTypes()
@@ -215,6 +228,7 @@ namespace Lounge55Networking.Server
                         Logger.LogInfo($"Mapped POST {postAttr.Url} -> {controller.Name}.{method.Name}");
                         ValidEndpoints.Add(new Core.MethodBase(postAttr.Method, postAttr.Url, method, controller));
                     }
+
                     var putAttr = method.GetCustomAttribute<PutAttribute>();
                     if (putAttr != null)
                     {
@@ -246,7 +260,7 @@ namespace Lounge55Networking.Server
         }
     }
 
-    public abstract class ApiControllerBase 
+    public abstract class ApiControllerBase
     {
         // ill add some actual apicontrollerbase stuff in here when i feel like it
     }
