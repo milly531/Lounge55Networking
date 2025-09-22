@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36408.4 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lounge55Networking", "Lounge55Networking\Lounge55Networking.csproj", "{2BE76213-E664-4248-8D87-5B379958B583}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2BE76213-E664-4248-8D87-5B379958B583}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BE76213-E664-4248-8D87-5B379958B583}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BE76213-E664-4248-8D87-5B379958B583}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BE76213-E664-4248-8D87-5B379958B583}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AC469A58-39CA-47B3-9563-BF959F9D0906}
+	EndGlobalSection
+EndGlobal
