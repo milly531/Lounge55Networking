@@ -4,6 +4,7 @@ I got bored and started developing a networking tool, It's still a work in progr
 
  ## How to use
  To use this you have to map endpoints, to do this you make a new class that inherits `ApiControllerBase`
+
 A basic api controller should look something like
 ```
 using Lounge55Networking.Server;
