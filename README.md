@@ -3,6 +3,11 @@ I got bored and started developing a networking tool, It's still a work in progr
  so let me know if some stuff doesnt work. 
 
  ## How to use
+ To use this library, you download the DLL from releases, or you can download the source code and open cmd and type 
+ `dotnet build` in the directory of the solution, then you can reference it in your project by adding an assembly reference
+ wherever it is in your IDE.
+
+ 
  To use this you have to map endpoints, to do this you make a new class that inherits `ApiControllerBase`
 
 A basic api controller should look something like
