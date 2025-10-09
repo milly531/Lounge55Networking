@@ -33,6 +33,9 @@ To map endpoints, you first create a new instance of
 ```
 NetworkManager Api = new NetworkManager();
 ```
+if you wanted to get context, you could make it internal/public to access it in ur ApiController class
+
+
 then you can do
 ```
 Api.MapEndpoints(typeof(ApiController).Assembly);
