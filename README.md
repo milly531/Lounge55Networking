@@ -1,5 +1,5 @@
 # Archival Notice
-This repo has been archived in favour of another networking tool, do not use this took at the moment. fuck this idiot he sucks :p
+This repo has been archived in favour of another networking tool coming out some time this year. do not use this tool at the moment. fuck this idiot he sucks :p
 # Lounge55Networking
 I got bored and started developing a networking tool, It's still a work in progress
  so let me know if some stuff doesnt work. 
